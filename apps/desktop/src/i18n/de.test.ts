@@ -91,4 +91,41 @@ describe('de locale content', () => {
     }
     visit(de as unknown as Record<string, unknown>, 'de')
   })
+
+  it('renders assembled profile-delete description in German', () => {
+    // delete-profile-dialog.tsx renders: prefix + name + mid + path + suffix
+    const name = 'test-profil'
+    const path = '/home/user/.hermes/profiles/test-profil'
+    const assembled = `${de.profiles.deleteDescPrefix} ${name} ${de.profiles.deleteDescMid} ${path} ${de.profiles.deleteDescSuffix}`
+    expect(assembled).toContain('Dies wird')
+    expect(assembled).toContain('löschen und den')
+    expect(assembled).toContain('Ordner entfernen')
+    expect(assembled).not.toMatch(/This will|and remove|directory/)
+  })
+
+  it('renders assembled profile-rename description in German', () => {
+    // delete-profile-dialog.tsx renders: prefix + path + suffix
+    const path = '/home/user/.hermes/profiles/test-profil'
+    const assembled = `${de.profiles.renameDescPrefix}${path}${de.profiles.renameDescSuffix}`
+    expect(assembled).toContain('Das Umbenennen aktualisiert')
+    expect(assembled).toContain('Wrapper-Skripte')
+    expect(assembled).not.toMatch(/Renaming updates/)
+  })
+
+  it('renders assembled cron-delete description in German', () => {
+    // cron/index.tsx renders: prefix + title + suffix
+    const title = 'Test-Cron'
+    const assembled = `${de.cron.deleteDescPrefix}${title}${de.cron.deleteDescSuffix}`
+    expect(assembled).toContain('Dies wird')
+    expect(assembled).toContain('dauerhaft entfernen')
+    expect(assembled).toContain('hört sofort auf zu feuern')
+    expect(assembled).not.toMatch(/This will remove|permanently/)
+  })
+
+  it('translates install.currentStage to German, not English', () => {
+    const result = de.install.currentStage('Dependency Setup')
+    expect(result).toContain('Aktuell')
+    expect(result).toContain('Dependency Setup')
+    expect(result).not.toMatch(/now:/)
+  })
 })
